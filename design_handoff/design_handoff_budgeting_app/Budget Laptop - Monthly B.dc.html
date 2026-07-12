@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Hanken+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+body{margin:0;-webkit-font-smoothing:antialiased;}
+.txlist{scrollbar-width:thin;scrollbar-color:oklch(0.85 0.012 150) transparent;}
+.txlist::-webkit-scrollbar{width:6px;}
+.txlist::-webkit-scrollbar-thumb{background:oklch(0.85 0.012 150);border-radius:3px;}
+.txlist::-webkit-scrollbar-track{background:transparent;}
+.amtInput{width:78px;border:none;background:transparent;text-align:center;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:oklch(0.33 0.04 152);outline:none;-moz-appearance:textfield;}
+.amtInput::-webkit-outer-spin-button,.amtInput::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+</style>
+</helmet>
+
+<div data-screen-label="Laptop — Monthly (B)" style="min-height:100vh;background:oklch(0.925 0.012 110);font-family:'Hanken Grotesque',system-ui,sans-serif;color:oklch(0.31 0.03 152);padding:46px 48px 80px;display:flex;flex-direction:column;align-items:center;">
+
+  <div style="width:1440px;max-width:100%;">
+    <div style="margin-bottom:14px;">
+      <div style="font-size:12px;letter-spacing:0.16em;font-weight:600;color:oklch(0.55 0.04 150);text-transform:uppercase;">Budgeting App · Laptop · Monthly</div>
+      <div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:24px;color:oklch(0.34 0.04 152);margin-top:4px;letter-spacing:-0.01em;">Direction B · Envelope-first</div>
+      <div style="font-size:13px;color:oklch(0.52 0.025 150);margin-top:3px;max-width:760px;">Hero + donut up top, then budget-vs-actual as the full-width centerpiece. The reimbursement flow lives in <strong style="color:oklch(0.4 0.04 152);">Recent transactions</strong> — click a row to flag it reimbursable, set the amount to be paid back, then mark it paid.</div>
+    </div>
+
+    <div data-screen-label="B — Envelope-first" style="border-radius:18px;overflow:hidden;box-shadow:0 30px 70px -30px rgba(35,45,30,0.45),0 8px 20px -12px rgba(35,45,30,0.3);background:oklch(0.966 0.014 92);">
+      <div style="height:42px;background:oklch(0.9 0.012 110);display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid oklch(0.88 0.012 110);">
+        <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:oklch(0.72 0.09 30);"></span><span style="width:11px;height:11px;border-radius:50%;background:oklch(0.82 0.09 90);"></span><span style="width:11px;height:11px;border-radius:50%;background:oklch(0.74 0.09 150);"></span></div>
+        <div style="flex:1;max-width:360px;height:24px;background:oklch(0.96 0.008 110);border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:12px;color:oklch(0.55 0.02 150);">budget.app/monthly</div>
+      </div>
+
+      <div style="display:flex;height:1052px;">
+        <!-- sidebar -->
+        <div style="width:236px;flex:0 0 auto;background:oklch(0.945 0.022 150);border-right:1px solid oklch(0.9 0.015 150);display:flex;flex-direction:column;padding:22px 16px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:0 6px 22px;">
+            <div style="width:32px;height:32px;border-radius:10px;background:oklch(0.5 0.085 153);display:flex;align-items:center;justify-content:center;color:oklch(0.97 0.02 150);font-family:'Manrope',sans-serif;font-weight:600;font-size:18px;">B</div>
+            <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:19px;color:oklch(0.33 0.04 152);">Budget</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;background:oklch(0.5 0.085 153);color:oklch(0.97 0.02 150);font-size:14px;font-weight:600;"><span style="width:16px;height:16px;border-radius:5px;background:oklch(0.97 0.02 150 / 0.85);"></span>Monthly</div>
+            <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;color:oklch(0.42 0.03 150);font-size:14px;font-weight:500;"><span style="width:16px;height:16px;border-radius:5px;border:2px solid oklch(0.6 0.03 150);"></span>Yearly</div>
+            <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;color:oklch(0.42 0.03 150);font-size:14px;font-weight:500;"><span style="width:16px;height:16px;border-radius:5px;border:2px solid oklch(0.6 0.03 150);"></span>Trips</div>
+            <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;color:oklch(0.42 0.03 150);font-size:14px;font-weight:500;"><span style="width:16px;height:16px;border-radius:5px;border:2px solid oklch(0.6 0.03 150);"></span>Goals</div>
+            <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;color:oklch(0.42 0.03 150);font-size:14px;font-weight:500;"><span style="width:16px;height:16px;border-radius:5px;border:2px solid oklch(0.6 0.03 150);"></span>Settings</div>
+          </div>
+          <div style="margin-top:24px;padding:14px 12px;background:oklch(0.97 0.01 120);border-radius:14px;border:1px solid oklch(0.9 0.015 150);">
+            <div style="font-size:10.5px;letter-spacing:0.1em;font-weight:700;color:oklch(0.55 0.03 150);margin-bottom:10px;">ACCOUNTS</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;"><span style="font-size:13px;color:oklch(0.4 0.02 150);">Checking</span><span style="font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:oklch(0.33 0.04 152);">$4,210</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:13px;color:oklch(0.4 0.02 150);">Savings</span><span style="font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:oklch(0.33 0.04 152);">$12,480</span></div>
+          </div>
+          <div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding:6px;">
+            <div style="width:34px;height:34px;border-radius:11px;background:oklch(0.5 0.085 153);display:flex;align-items:center;justify-content:center;color:oklch(0.97 0.02 150);font-weight:700;font-size:13px;">JD</div>
+            <div><div style="font-size:13px;font-weight:600;color:oklch(0.33 0.04 152);">Jordan D.</div><div style="font-size:11px;color:oklch(0.55 0.02 150);">Personal</div></div>
+          </div>
+        </div>
+
+        <!-- main -->
+        <div style="flex:1;min-width:0;padding:24px 28px;display:flex;flex-direction:column;gap:16px;overflow:hidden;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-size:11px;letter-spacing:0.12em;font-weight:600;color:oklch(0.55 0.03 150);">MONTHLY</div><div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:24px;color:oklch(0.31 0.04 152);line-height:1;margin-top:2px;">June 2026</div></div>
+            <button style="height:38px;padding:0 16px;border:none;border-radius:11px;background:oklch(0.5 0.085 153);color:oklch(0.97 0.02 150);font-family:'Manrope',sans-serif;font-weight:500;font-size:14px;display:flex;align-items:center;gap:7px;cursor:pointer;"><span style="font-size:17px;">+</span>Add transaction</button>
+          </div>
+
+          <!-- hero + donut -->
+          <div style="display:flex;gap:16px;">
+            <div style="flex:0 0 400px;background:oklch(0.945 0.03 150);border:1px solid oklch(0.9 0.03 150);border-radius:18px;padding:20px 22px;">
+              <div style="font-size:13px;font-weight:600;color:oklch(0.46 0.05 155);">Left to spend this month</div>
+              <div style="display:flex;align-items:baseline;gap:2px;font-family:'Manrope',sans-serif;color:oklch(0.43 0.075 156);margin-top:4px;"><span style="font-size:28px;font-weight:500;">$</span><span style="font-size:58px;font-weight:600;letter-spacing:-0.02em;line-height:0.95;">1,284</span></div>
+              <div style="position:relative;height:12px;border-radius:7px;background:oklch(0.87 0.035 150);margin-top:14px;overflow:visible;"><div style="position:absolute;top:0;left:0;height:100%;width:60%;border-radius:7px;background:oklch(0.58 0.085 153);"></div><div style="position:absolute;top:-5px;left:47%;width:3px;height:22px;border-radius:2px;background:oklch(0.5 0.085 47);"></div></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:11.5px;"><span style="color:oklch(0.5 0.04 152);">$1,916 spent · 60%</span><sc-if value="{{ heroOwed }}" hint-placeholder-val="{{ true }}"><span style="display:flex;align-items:center;gap:5px;font-weight:600;color:oklch(0.52 0.16 28);"><span style="width:7px;height:7px;border-radius:50%;background:oklch(0.58 0.16 28);"></span>{{ heroOwedText }}</span></sc-if><sc-if value="{{ heroReimbursed }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:5px;font-weight:600;color:oklch(0.45 0.1 155);"><span style="width:7px;height:7px;border-radius:50%;background:oklch(0.52 0.1 155);"></span>All reimbursed</span></sc-if></div>
+              <div style="display:flex;gap:10px;margin-top:18px;border-top:1px solid oklch(0.88 0.03 150);padding-top:16px;">
+                <div style="flex:1;"><div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:oklch(0.5 0.03 150);"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.5 0.07 155);"></span>Income</div><div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:21px;color:oklch(0.33 0.04 152);margin-top:3px;">$3,100</div></div>
+                <div style="flex:1;"><div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:oklch(0.5 0.03 150);"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.62 0.085 47);"></span>Spent</div><div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:21px;color:oklch(0.33 0.04 152);margin-top:3px;">$1,916</div></div>
+                <div style="flex:1;"><div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:oklch(0.5 0.03 150);"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.72 0.06 150);"></span>Saved</div><div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:21px;color:oklch(0.33 0.04 152);margin-top:3px;">$620</div></div>
+              </div>
+              <div style="margin-top:16px;background:oklch(0.96 0.022 150);border-radius:13px;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                  <div style="font-size:11.5px;font-weight:600;color:oklch(0.46 0.045 152);">Safe to spend per week</div>
+                  <div style="font-size:11px;color:oklch(0.55 0.03 150);margin-top:2px;">to finish June on track</div>
+                </div>
+                <div style="display:flex;align-items:baseline;font-family:'Manrope',sans-serif;color:oklch(0.42 0.06 153);"><span style="font-size:15px;font-weight:600;">$</span><span style="font-size:31px;font-weight:600;letter-spacing:-0.01em;">560</span><span style="font-size:12px;color:oklch(0.55 0.03 150);margin-left:3px;align-self:flex-end;margin-bottom:4px;">/week</span></div>
+              </div>
+            </div>
+            <div style="flex:1;background:oklch(0.995 0.005 92);border:1px solid oklch(0.91 0.012 110);border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;">
+              <div style="font-family:'Manrope',sans-serif;font-weight:600;font-size:15px;color:oklch(0.34 0.04 152);margin-bottom:10px;">Spending by category</div>
+              <div style="display:flex;align-items:center;gap:24px;flex:1;">
+                <div style="width:142px;height:142px;flex:0 0 auto;border-radius:50%;background:conic-gradient(oklch(0.6 0.075 152) 0 21.4%,oklch(0.62 0.085 47) 21.4% 35.4%,oklch(0.73 0.075 82) 35.4% 44.9%,oklch(0.66 0.05 180) 44.9% 54%,oklch(0.58 0.06 320) 54% 62.6%,oklch(0.6 0.06 230) 62.6% 70.4%,oklch(0.85 0.018 110) 70.4% 100%);display:flex;align-items:center;justify-content:center;"><div style="width:88px;height:88px;border-radius:50%;background:oklch(0.995 0.005 92);display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:18px;color:oklch(0.33 0.04 152);">$1,916</span><span style="font-size:10px;color:oklch(0.55 0.02 150);">spent</span></div></div>
+                <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:7px 18px;">
+                  <div style="display:flex;align-items:center;gap:7px;font-size:12px;"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.6 0.075 152);"></span><span style="flex:1;color:oklch(0.4 0.02 150);">Groceries</span><span style="font-weight:600;color:oklch(0.33 0.04 152);">$410</span></div>
+                  <div style="display:flex;align-items:center;gap:7px;font-size:12px;"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.66 0.05 180);"></span><span style="flex:1;color:oklch(0.4 0.02 150);">Household</span><span style="font-weight:600;color:oklch(0.33 0.04 152);">$175</span></div>
+                  <div style="display:flex;align-items:center;gap:7px;font-size:12px;"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.62 0.085 47);"></span><span style="flex:1;color:oklch(0.4 0.02 150);">Out to eat</span><span style="font-weight:600;color:oklch(0.33 0.04 152);">$268</span></div>
+                  <div style="display:flex;align-items:center;gap:7px;font-size:12px;"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.58 0.06 320);"></span><span style="flex:1;color:oklch(0.4 0.02 150);">Social &amp; Gifts</span><span style="font-weight:600;color:oklch(0.33 0.04 152);">$165</span></div>
+                  <div style="display:flex;align-items:center;gap:7px;font-size:12px;"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.73 0.075 82);"></span><span style="flex:1;color:oklch(0.4 0.02 150);">Activities</span><span style="font-weight:600;color:oklch(0.33 0.04 152);">$182</span></div>
+                  <div style="display:flex;align-items:center;gap:7px;font-size:12px;"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.85 0.018 110);"></span><span style="flex:1;color:oklch(0.4 0.02 150);">Everything else</span><span style="font-weight:600;color:oklch(0.33 0.04 152);">$716</span></div>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid oklch(0.94 0.008 110);">
+                <div style="flex:1;background:oklch(0.965 0.012 110);border-radius:10px;padding:8px 11px;"><div style="font-size:10px;color:oklch(0.55 0.025 150);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">Biggest</div><div style="font-size:12.5px;font-weight:600;color:oklch(0.33 0.04 152);margin-top:3px;">Groceries · 21%</div></div>
+                <div style="flex:1;background:oklch(0.965 0.012 110);border-radius:10px;padding:8px 11px;"><div style="font-size:10px;color:oklch(0.55 0.025 150);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">Top 3</div><div style="font-size:12.5px;font-weight:600;color:oklch(0.33 0.04 152);margin-top:3px;">45% of spend</div></div>
+                <div style="flex:1;background:oklch(0.965 0.012 110);border-radius:10px;padding:8px 11px;"><div style="font-size:10px;color:oklch(0.55 0.025 150);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">Tracked</div><div style="font-size:12.5px;font-weight:600;color:oklch(0.33 0.04 152);margin-top:3px;">12 categories</div></div>
+              </div>
+            </div>
+            <!-- savings goal (rotating) -->
+            <div style="flex:0 0 280px;background:oklch(0.995 0.005 92);border:1px solid oklch(0.91 0.012 110);border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:15px;color:oklch(0.34 0.04 152);">Savings goal</span>
+                <span style="font-size:11px;font-weight:600;color:oklch(0.55 0.025 150);letter-spacing:0.04em;">{{goalPosition}}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+                <button onClick="{{onPrev}}" style="width:28px;height:28px;flex:0 0 auto;border:1px solid oklch(0.9 0.012 110);border-radius:9px;background:oklch(0.97 0.008 110);color:oklch(0.45 0.03 150);font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">‹</button>
+                <span style="flex:1;text-align:center;font-family:'Manrope',sans-serif;font-weight:600;font-size:14.5px;color:oklch(0.33 0.04 152);">{{goalName}}</span>
+                <button onClick="{{onNext}}" style="width:28px;height:28px;flex:0 0 auto;border:1px solid oklch(0.9 0.012 110);border-radius:9px;background:oklch(0.97 0.008 110);color:oklch(0.45 0.03 150);font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">›</button>
+              </div>
+              <div style="display:flex;justify-content:center;margin:8px 0;">
+                <div style="position:relative;width:150px;height:150px;">
+                  <div style="width:150px;height:150px;border-radius:50%;background:{{ringBg}};transition:background 0.45s ease;"></div>
+                  <div style="position:absolute;inset:17px;border-radius:50%;background:oklch(0.995 0.005 92);display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:22px;color:oklch(0.33 0.04 152);letter-spacing:-0.01em;">{{savedDisplay}}</span>
+                    <span style="font-size:10.5px;color:oklch(0.55 0.02 150);margin-top:1px;">{{totalDisplay}}</span>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:center;gap:6px;margin-bottom:9px;">
+                <sc-for list="{{dots}}" as="dot" hint-placeholder-count="3">
+                  <button onClick="{{dot.onClick}}" style="width:7px;height:7px;border-radius:50%;border:none;padding:0;cursor:pointer;background:{{dot.bg}};"></button>
+                </sc-for>
+              </div>
+              <div style="text-align:center;font-size:12px;color:oklch(0.5 0.04 152);"><strong style="color:{{accentColor}};">{{pctLabel}}</strong> · {{remainLabel}}</div>
+              <button onClick="{{onAdd}}" style="margin-top:auto;height:36px;border:none;border-radius:10px;background:{{accentColor}};color:oklch(0.99 0.01 150);font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;"><span style="font-size:16px;">+</span>Add $250</button>
+            </div>
+          </div>
+
+          <!-- centerpiece: budget vs actual -->
+          <div style="background:oklch(0.995 0.005 92);border:1px solid oklch(0.91 0.012 110);border-radius:18px;padding:18px 22px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:16px;color:oklch(0.34 0.04 152);">Envelopes — budget vs actual</span>
+              <div style="display:flex;gap:18px;align-items:baseline;font-size:12px;"><span style="color:oklch(0.5 0.03 150);">Assigned <strong style="font-family:'Manrope',sans-serif;color:oklch(0.33 0.04 152);font-size:14px;">$3,200</strong></span><span style="color:oklch(0.5 0.03 150);">Spent <strong style="font-family:'Manrope',sans-serif;color:oklch(0.33 0.04 152);font-size:14px;">$1,916</strong></span><span style="color:oklch(0.5 0.03 150);">Available <strong style="font-family:'Manrope',sans-serif;color:oklch(0.43 0.07 153);font-size:14px;">$1,284</strong></span></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 40px;">
+              <div style="display:flex;flex-direction:column;">
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.6 0.075 152);"></span>Groceries</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.9 0.03 150);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:68%;background:oklch(0.6 0.075 152);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.45 0.04 152);">$410<span style="color:oklch(0.6 0.02 150);">/$600</span></span></div>
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;border-top:1px solid oklch(0.94 0.008 110);"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.62 0.085 47);"></span>Out to eat</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.91 0.04 38);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:100%;background:oklch(0.58 0.095 40);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.5 0.095 38);">$268<span style="color:oklch(0.62 0.05 40);">/$240</span></span></div>
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;border-top:1px solid oklch(0.94 0.008 110);"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.73 0.075 82);"></span>Activities</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.91 0.04 38);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:100%;background:oklch(0.58 0.095 40);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.5 0.095 38);">$182<span style="color:oklch(0.62 0.05 40);">/$150</span></span></div>
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;border-top:1px solid oklch(0.94 0.008 110);"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.66 0.05 180);"></span>Household</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.9 0.03 150);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:49%;background:oklch(0.6 0.075 152);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.45 0.04 152);">$175<span style="color:oklch(0.6 0.02 150);">/$360</span></span></div>
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;border-top:1px solid oklch(0.94 0.008 110);"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.58 0.06 320);"></span>Social &amp; Gifts</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.9 0.03 150);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:75%;background:oklch(0.6 0.075 152);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.45 0.04 152);">$165<span style="color:oklch(0.6 0.02 150);">/$220</span></span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;">
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.6 0.06 230);"></span>Donations</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.9 0.03 150);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:50%;background:oklch(0.6 0.075 152);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.45 0.04 152);">$150<span style="color:oklch(0.6 0.02 150);">/$300</span></span></div>
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;border-top:1px solid oklch(0.94 0.008 110);"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.6 0.05 60);"></span>Utilities</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.9 0.03 150);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:78%;background:oklch(0.6 0.075 152);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.45 0.04 152);">$140<span style="color:oklch(0.6 0.02 150);">/$180</span></span></div>
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;border-top:1px solid oklch(0.94 0.008 110);"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.7 0.05 20);"></span>Personal care</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.9 0.03 150);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:75%;background:oklch(0.6 0.075 152);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.45 0.04 152);">$98<span style="color:oklch(0.6 0.02 150);">/$130</span></span></div>
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;border-top:1px solid oklch(0.94 0.008 110);"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.73 0.075 82);"></span>Transportation</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.9 0.03 150);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:80%;background:oklch(0.6 0.075 152);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.45 0.04 152);">$96<span style="color:oklch(0.6 0.02 150);">/$120</span></span></div>
+                <div style="display:flex;align-items:center;gap:14px;padding:7px 0;border-top:1px solid oklch(0.94 0.008 110);"><span style="width:120px;flex:0 0 auto;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.62 0.06 320);"></span>Random</span><span style="flex:1;position:relative;height:18px;"><span style="position:absolute;inset:0;background:oklch(0.91 0.04 38);border-radius:6px;"></span><span style="position:absolute;top:0;left:0;height:100%;width:100%;background:oklch(0.58 0.095 40);border-radius:6px;"></span></span><span style="width:94px;text-align:right;font-family:'Manrope',sans-serif;font-size:12.5px;color:oklch(0.5 0.095 38);">$190<span style="color:oklch(0.62 0.05 40);">/$150</span></span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- bottom: trend + transactions -->
+          <div style="display:flex;gap:16px;flex:1;min-height:0;">
+            <div style="flex:1;background:oklch(0.995 0.005 92);border:1px solid oklch(0.91 0.012 110);border-radius:18px;padding:18px 20px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:15px;color:oklch(0.34 0.04 152);">Income · Spending · Saved</span><div style="display:flex;gap:14px;font-size:11.5px;color:oklch(0.5 0.02 150);"><span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:oklch(0.5 0.07 155);"></span>Income</span><span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:oklch(0.62 0.085 47);"></span>Spending</span><span style="display:flex;align-items:center;gap:5px;"><span style="width:9px;height:9px;border-radius:2px;background:oklch(0.72 0.06 150);"></span>Saved</span></div></div>
+              <div style="position:relative;height:220px;padding-left:34px;">
+                <div style="position:absolute;left:0;top:0;bottom:22px;width:34px;"><div style="position:absolute;bottom:182px;left:0;font-size:10px;color:oklch(0.6 0.02 150);">$5k</div><div style="position:absolute;bottom:136px;left:0;font-size:10px;color:oklch(0.6 0.02 150);">$4k</div><div style="position:absolute;bottom:90px;left:0;font-size:10px;color:oklch(0.6 0.02 150);">$3k</div><div style="position:absolute;bottom:43px;left:0;font-size:10px;color:oklch(0.6 0.02 150);">$2k</div><div style="position:absolute;bottom:-2px;left:0;font-size:10px;color:oklch(0.6 0.02 150);">$0</div></div>
+                <div style="position:absolute;left:34px;right:0;top:0;bottom:22px;">
+                  <div style="position:absolute;left:0;right:0;bottom:186px;border-top:1px solid oklch(0.92 0.008 110);"></div><div style="position:absolute;left:0;right:0;bottom:139px;border-top:1px solid oklch(0.92 0.008 110);"></div><div style="position:absolute;left:0;right:0;bottom:93px;border-top:1px solid oklch(0.92 0.008 110);"></div><div style="position:absolute;left:0;right:0;bottom:46px;border-top:1px solid oklch(0.92 0.008 110);"></div><div style="position:absolute;left:0;right:0;bottom:0;border-top:1.5px solid oklch(0.86 0.012 110);"></div>
+                  <div style="position:absolute;left:0;right:0;bottom:0;top:0;display:flex;align-items:flex-end;justify-content:space-around;">
+                    <div style="display:flex;align-items:flex-end;gap:3px;height:100%;"><span style="width:13px;height:195px;background:oklch(0.5 0.07 155);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:144px;background:oklch(0.62 0.085 47);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:42px;background:oklch(0.72 0.06 150);border-radius:3px 3px 0 0;"></span></div>
+                    <div style="display:flex;align-items:flex-end;gap:3px;height:100%;"><span style="width:13px;height:195px;background:oklch(0.5 0.07 155);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:155px;background:oklch(0.62 0.085 47);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:32px;background:oklch(0.72 0.06 150);border-radius:3px 3px 0 0;"></span></div>
+                    <div style="display:flex;align-items:flex-end;gap:3px;height:100%;"><span style="width:13px;height:195px;background:oklch(0.5 0.07 155);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:138px;background:oklch(0.62 0.085 47);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:49px;background:oklch(0.72 0.06 150);border-radius:3px 3px 0 0;"></span></div>
+                    <div style="display:flex;align-items:flex-end;gap:3px;height:100%;"><span style="width:13px;height:213px;background:oklch(0.5 0.07 155);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:167px;background:oklch(0.62 0.085 47);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:37px;background:oklch(0.72 0.06 150);border-radius:3px 3px 0 0;"></span></div>
+                    <div style="display:flex;align-items:flex-end;gap:3px;height:100%;"><span style="width:13px;height:195px;background:oklch(0.5 0.07 155);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:142px;background:oklch(0.62 0.085 47);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:45px;background:oklch(0.72 0.06 150);border-radius:3px 3px 0 0;"></span></div>
+                    <div style="display:flex;align-items:flex-end;gap:3px;height:100%;"><span style="width:13px;height:195px;background:oklch(0.5 0.07 155 / 0.5);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:88px;background:oklch(0.62 0.085 47);border-radius:3px 3px 0 0;"></span><span style="width:13px;height:29px;background:oklch(0.72 0.06 150);border-radius:3px 3px 0 0;"></span></div>
+                  </div>
+                </div>
+                <div style="position:absolute;left:34px;right:0;bottom:0;display:flex;justify-content:space-around;font-size:11px;color:oklch(0.5 0.02 150);"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span style="font-weight:700;color:oklch(0.4 0.04 152);">Jun</span></div>
+              </div>
+            </div>
+            <div style="flex:0 0 420px;background:oklch(0.995 0.005 92);border:1px solid oklch(0.91 0.012 110);border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:15px;color:oklch(0.34 0.04 152);">Recent transactions</span><span style="font-size:11px;color:oklch(0.58 0.025 150);">Click a row to flag reimbursable</span></div>
+              <div class="txlist" style="flex:1;min-height:0;overflow-y:auto;padding-right:4px;">
+                <sc-for list="{{ txnRows }}" as="t" hint-placeholder-count="7">
+                  <div style="border-bottom:1px solid oklch(0.94 0.008 110);background:{{ t.rowBg }};border-radius:9px;">
+                    <div onClick="{{ t.onSelect }}" style="display:flex;align-items:center;gap:8px;padding:8px 9px;cursor:pointer;">
+                      <span style="width:48px;flex:0 0 auto;font-size:12px;color:oklch(0.55 0.02 150);">{{ t.date }}</span>
+                      <span style="flex:1;min-width:0;font-size:13px;font-weight:600;color:oklch(0.31 0.03 152);display:flex;align-items:center;gap:7px;flex-wrap:wrap;">{{ t.name }}<sc-if value="{{ t.reimb }}" hint-placeholder-val="{{ true }}"><span style="font-size:9.5px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;padding:2px 7px;border-radius:6px;color:{{ t.tagColor }};background:{{ t.tagBg }};">{{ t.tagText }}</span></sc-if></span>
+                      <span style="display:flex;flex-direction:column;align-items:flex-end;flex:0 0 auto;">
+                        <span style="font-family:'Manrope',sans-serif;font-size:13px;color:oklch(0.31 0.03 152);">{{ t.amountDisplay }}</span>
+                        <sc-if value="{{ t.reimb }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;color:{{ t.owedColor }};">{{ t.owedDisplay }}</span></sc-if>
+                      </span>
+                    </div>
+                    <sc-if value="{{ t.isOpen }}" hint-placeholder-val="{{ false }}">
+                      <div style="padding:2px 12px 12px 57px;display:flex;flex-direction:column;gap:9px;">
+                        <button onClick="{{ t.onToggleReimb }}" style="align-self:flex-start;height:30px;padding:0 13px;border:none;border-radius:9px;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;cursor:pointer;background:{{ t.reimbBtnBg }};color:{{ t.reimbBtnColor }};">{{ t.reimbBtnLabel }}</button>
+                        <sc-if value="{{ t.reimb }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                            <span style="font-size:11.5px;color:oklch(0.5 0.03 150);">To be paid back</span>
+                            <div style="display:flex;align-items:center;border:1px solid oklch(0.88 0.012 110);border-radius:9px;overflow:hidden;">
+                              <button onClick="{{ t.onMinus }}" style="width:27px;height:28px;border:none;background:oklch(0.96 0.008 110);color:oklch(0.45 0.03 150);font-size:16px;line-height:1;cursor:pointer;">−</button>
+                              <span style="display:flex;align-items:center;padding-left:6px;color:oklch(0.5 0.03 150);font-family:'Manrope',sans-serif;font-size:13px;">$<input class="amtInput" type="text" inputmode="decimal" value="{{ t.reimbAmtInput }}" onChange="{{ t.onAmt }}" onBlur="{{ t.onAmtBlur }}" /></span>
+                              <button onClick="{{ t.onPlus }}" style="width:27px;height:28px;border:none;background:oklch(0.96 0.008 110);color:oklch(0.45 0.03 150);font-size:16px;line-height:1;cursor:pointer;">+</button>
+                            </div>
+                            <button onClick="{{ t.onTogglePaid }}" style="height:30px;padding:0 13px;border:none;border-radius:9px;font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;cursor:pointer;background:{{ t.paidBtnBg }};color:{{ t.paidBtnColor }};">{{ t.paidBtnLabel }}</button>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="margin-top:14px;padding-top:13px;border-top:1.5px solid oklch(0.9 0.012 110);">
+                <div style="display:flex;justify-content:space-between;font-size:12.5px;color:oklch(0.5 0.03 150);margin-bottom:5px;"><span>Spent this month</span><span style="font-family:'Manrope',sans-serif;color:oklch(0.4 0.03 152);">{{ spentDisplay }}</span></div>
+                <sc-if value="{{ hasReimb }}" hint-placeholder-val="{{ true }}"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:oklch(0.55 0.14 28);margin-bottom:7px;"><span>Reimbursable</span><span style="font-family:'Manrope',sans-serif;">{{ reimbDisplay }}</span></div></sc-if>
+                <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:8px;border-top:1px solid oklch(0.94 0.008 110);"><span style="font-size:13px;font-weight:700;color:oklch(0.33 0.04 152);">Out of pocket</span><span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:19px;color:oklch(0.33 0.04 152);">{{ outOfPocketDisplay }}</span></div>
+                <div style="display:flex;gap:8px;margin-top:11px;">
+                  <sc-if value="{{ hasOwed }}" hint-placeholder-val="{{ true }}"><div style="flex:1;display:flex;align-items:center;gap:7px;background:oklch(0.94 0.045 28);border-radius:10px;padding:8px 11px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.58 0.16 28);flex:0 0 auto;"></span><span style="flex:1;font-size:11.5px;font-weight:600;color:oklch(0.5 0.13 28);">Owed to you</span><span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:oklch(0.52 0.16 28);">{{ owedDisplay }}</span></div></sc-if>
+                  <sc-if value="{{ hasReceived }}" hint-placeholder-val="{{ false }}"><div style="flex:1;display:flex;align-items:center;gap:7px;background:oklch(0.93 0.05 155);border-radius:10px;padding:8px 11px;"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.52 0.1 155);flex:0 0 auto;"></span><span style="flex:1;font-size:11.5px;font-weight:600;color:oklch(0.42 0.09 155);">Reimbursed</span><span style="font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;color:oklch(0.45 0.1 155);">{{ receivedDisplay }}</span></div></sc-if>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1536,&quot;height&quot;:1180}}">
+class Component extends DCLogic {
+  state = {
+    idx: 0, saved: [6800, 2100, 465],
+    open: null,
+    editAmt: '',
+    txns: [
+      { date:'Jun 14', name:'Blue Bottle Coffee',     amount:5.75,   reimb:false, reimbAmt:0,     paid:false },
+      { date:'Jun 14', name:'United Airlines',         amount:312.00, reimb:true,  reimbAmt:312.00, paid:false },
+      { date:'Jun 13', name:'Lyft — to airport',       amount:24.10,  reimb:true,  reimbAmt:24.10,  paid:false },
+      { date:'Jun 13', name:'Whole Foods',             amount:48.90,  reimb:false, reimbAmt:0,     paid:false },
+      { date:'Jun 12', name:'Team lunch · Sweetgreen', amount:86.40,  reimb:true,  reimbAmt:86.40,  paid:true  },
+      { date:'Jun 12', name:"Trader Joe's",            amount:62.40,  reimb:false, reimbAmt:0,     paid:false },
+      { date:'Jun 11', name:'Spotify',                 amount:11.99,  reimb:false, reimbAmt:0,     paid:false },
+    ],
+  };
+
+  selectTxn(i){ this.setState(s=>{ const opening = s.open!==i; return { open: opening ? i : null, editAmt: opening ? s.txns[i].reimbAmt.toFixed(2) : '' }; }); }
+  toggleReimb(i){ this.setState(s=>{ const t=s.txns.slice(); const x={...t[i]}; x.reimb=!x.reimb; if(x.reimb && x.reimbAmt===0) x.reimbAmt=x.amount; if(!x.reimb){ x.paid=false; } t[i]=x; return {txns:t, editAmt: x.reimb ? x.reimbAmt.toFixed(2) : ''}; }); }
+  bumpReimb(i,d){ this.setState(s=>{ const t=s.txns.slice(); const x={...t[i]}; x.reimbAmt=Math.max(0, Math.min(x.amount, Math.round((x.reimbAmt+d)*100)/100)); t[i]=x; return {txns:t, editAmt: x.reimbAmt.toFixed(2)}; }); }
+  onAmtInput(i,e){ const raw=e.target.value; const v=parseFloat(raw.replace(/[^0-9.]/g,'')); this.setState(s=>{ const t=s.txns.slice(); const x={...t[i]}; const amt=isNaN(v)?0:Math.max(0, Math.min(x.amount, Math.round(v*100)/100)); x.reimbAmt=amt; t[i]=x; return {txns:t, editAmt: raw}; }); }
+  onAmtBlur(i){ this.setState(s=>({ editAmt: s.txns[i].reimbAmt.toFixed(2) })); }
+  togglePaid(i){ this.setState(s=>{ const t=s.txns.slice(); const x={...t[i]}; x.paid=!x.paid; t[i]=x; return {txns:t}; }); }
+
+  goals() {
+    return [
+      { name: 'Emergency Fund', total: 10000, accent: 'oklch(0.5 0.085 153)' },
+      { name: 'Mexico Trip',    total: 3000,  accent: 'oklch(0.55 0.08 235)' },
+      { name: 'New Laptop',     total: 1500,  accent: 'oklch(0.62 0.095 68)' },
+    ];
+  }
+
+  go(delta) {
+    const n = this.goals().length;
+    this.setState(s => ({ idx: (s.idx + delta + n) % n }));
+  }
+  goTo(i) { this.setState({ idx: i }); }
+  addFunds() {
+    this.setState(s => {
+      const saved = s.saved.slice();
+      const total = this.goals()[s.idx].total;
+      saved[s.idx] = Math.min(total, saved[s.idx] + 250);
+      return { saved };
+    });
+  }
+
+  renderVals() {
+    const goals = this.goals();
+    const idx = this.state.idx;
+    const g = goals[idx];
+    const track = 'oklch(0.9 0.03 150)';
+    const saved = this.state.saved[idx];
+    const pctExact = Math.min(100, saved / g.total * 100);
+    const pct = Math.round(pctExact);
+    const remaining = Math.max(0, g.total - saved);
+    const fmt = (n) => '$' + n.toLocaleString('en-US');
+    const fmt2 = (n) => '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+    // ---- reimbursement ----
+    const txns = this.state.txns;
+    const baseSpent = 1916.00;
+    let reimbTotal=0, owed=0, received=0;
+    txns.forEach(t=>{ if(t.reimb){ reimbTotal+=t.reimbAmt; if(t.paid) received+=t.reimbAmt; else owed+=t.reimbAmt; } });
+    const outOfPocket = baseSpent - reimbTotal;
+    const red='oklch(0.55 0.16 28)', redDeep='oklch(0.5 0.13 28)', green='oklch(0.47 0.1 155)', greenDeep='oklch(0.42 0.09 155)';
+    const txnRows = txns.map((t,i)=>{
+      const isOpen = this.state.open===i;
+      return {
+        date:t.date, name:t.name, amountDisplay:fmt2(t.amount),
+        reimb:t.reimb, isOpen,
+        tagText: t.paid ? 'Reimbursed' : 'Not paid',
+        tagColor: t.paid ? greenDeep : redDeep,
+        tagBg: t.paid ? 'oklch(0.93 0.05 155)' : 'oklch(0.93 0.05 28)',
+        owedDisplay: (t.paid?'+':'−') + fmt2(t.reimbAmt),
+        owedColor: t.paid ? green : red,
+        reimbAmtDisplay: fmt2(t.reimbAmt),
+        reimbAmtInput: isOpen ? this.state.editAmt : t.reimbAmt.toFixed(2),
+        rowBg: isOpen ? 'oklch(0.97 0.012 150)' : 'transparent',
+        reimbBtnBg: t.reimb ? 'oklch(0.5 0.085 153)' : 'oklch(0.95 0.008 110)',
+        reimbBtnColor: t.reimb ? 'oklch(0.97 0.02 150)' : 'oklch(0.45 0.03 150)',
+        reimbBtnLabel: t.reimb ? '✓ Reimbursable' : 'Mark reimbursable',
+        paidBtnBg: t.paid ? 'oklch(0.5 0.1 155)' : 'oklch(0.95 0.05 28)',
+        paidBtnColor: t.paid ? 'oklch(0.97 0.02 150)' : redDeep,
+        paidBtnLabel: t.paid ? '✓ Paid back' : 'Mark as paid',
+        onSelect: ()=>this.selectTxn(i),
+        onToggleReimb: ()=>this.toggleReimb(i),
+        onMinus: ()=>this.bumpReimb(i,-5),
+        onPlus: ()=>this.bumpReimb(i,5),
+        onAmt: (e)=>this.onAmtInput(i,e),
+        onAmtBlur: ()=>this.onAmtBlur(i),
+        onTogglePaid: ()=>this.togglePaid(i),
+      };
+    });
+
+    return {
+      txnRows,
+      spentDisplay: fmt2(baseSpent),
+      reimbDisplay: '−' + fmt2(reimbTotal),
+      outOfPocketDisplay: fmt2(outOfPocket),
+      owedDisplay: fmt2(owed),
+      receivedDisplay: fmt2(received),
+      hasReimb: reimbTotal > 0,
+      hasOwed: owed > 0,
+      hasReceived: received > 0,
+      heroOwed: owed > 0,
+      heroReimbursed: owed === 0 && reimbTotal > 0,
+      heroOwedText: fmt2(owed) + ' owed to you',
+      goalName: g.name,
+      goalPosition: (idx + 1) + ' / ' + goals.length,
+      accentColor: g.accent,
+      ringBg: 'conic-gradient(' + g.accent + ' 0 ' + pctExact + '%, ' + track + ' ' + pctExact + '% 100%)',
+      savedDisplay: fmt(saved),
+      totalDisplay: 'of ' + fmt(g.total),
+      pctLabel: pct + '% there',
+      remainLabel: remaining > 0 ? fmt(remaining) + ' to close the ring' : 'Ring closed — goal reached',
+      onPrev: () => this.go(-1),
+      onNext: () => this.go(1),
+      onAdd: () => this.addFunds(),
+      dots: goals.map((gg, i) => ({
+        bg: i === idx ? g.accent : 'oklch(0.85 0.012 150)',
+        onClick: () => this.goTo(i),
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>
