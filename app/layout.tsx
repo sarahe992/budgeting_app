@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "Budget",
   },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+  },
 };
 
 export const viewport: Viewport = {
