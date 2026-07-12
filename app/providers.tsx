@@ -12,9 +12,11 @@ import { DEFAULT_ACCOUNTS, STARTER_CATEGORIES } from "./lib/categories";
 import {
   loadCategories,
   loadEnvelopes,
+  loadMonthBudgets,
   loadTransactions,
   saveCategories,
   saveEnvelopes,
+  saveMonthBudgets,
   saveTransactions,
 } from "./lib/storage";
 import type { Account, Category, Envelope, Transaction } from "./lib/types";
@@ -24,14 +26,18 @@ interface AppData {
   categories: Category[];
   envelopes: Envelope[];
   accounts: Account[];
+  monthBudgets: Record<string, number>;
   addTransaction: (tx: Omit<Transaction, "id">) => void;
   setCategories: (categories: Category[]) => void;
+  setEnvelopeBudget: (categoryId: string, month: string, budget: number) => void;
+  setMonthBudget: (month: string, budget: number) => void;
 }
 
 interface HydratedState {
   transactions: Transaction[];
   categories: Category[];
   envelopes: Envelope[];
+  monthBudgets: Record<string, number>;
 }
 
 const AppDataContext = createContext<AppData | null>(null);
@@ -41,6 +47,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     transactions: [],
     categories: STARTER_CATEGORIES,
     envelopes: [],
+    monthBudgets: {},
   });
   const [accounts] = useState<Account[]>(DEFAULT_ACCOUNTS);
   const hydrated = useRef(false);
@@ -55,6 +62,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       transactions: loadTransactions(),
       categories: loadCategories(),
       envelopes: loadEnvelopes(),
+      monthBudgets: loadMonthBudgets(),
     });
     hydrated.current = true;
   }, []);
@@ -64,6 +72,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     saveTransactions(state.transactions);
     saveCategories(state.categories);
     saveEnvelopes(state.envelopes);
+    saveMonthBudgets(state.monthBudgets);
   }, [state]);
 
   function addTransaction(tx: Omit<Transaction, "id">) {
@@ -78,6 +87,33 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({ ...prev, categories }));
   }
 
+  function setEnvelopeBudget(categoryId: string, month: string, budget: number) {
+    setState((prev) => {
+      const idx = prev.envelopes.findIndex(
+        (e) => e.categoryId === categoryId && e.month === month
+      );
+      if (idx >= 0) {
+        const envelopes = prev.envelopes.slice();
+        envelopes[idx] = { ...envelopes[idx], budget };
+        return { ...prev, envelopes };
+      }
+      const envelope: Envelope = {
+        id: `env_${categoryId}_${month}`,
+        categoryId,
+        month,
+        budget,
+      };
+      return { ...prev, envelopes: [...prev.envelopes, envelope] };
+    });
+  }
+
+  function setMonthBudget(month: string, budget: number) {
+    setState((prev) => ({
+      ...prev,
+      monthBudgets: { ...prev.monthBudgets, [month]: budget },
+    }));
+  }
+
   return (
     <AppDataContext.Provider
       value={{
@@ -85,8 +121,11 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         categories: state.categories,
         envelopes: state.envelopes,
         accounts,
+        monthBudgets: state.monthBudgets,
         addTransaction,
         setCategories,
+        setEnvelopeBudget,
+        setMonthBudget,
       }}
     >
       {children}

@@ -2,8 +2,18 @@
 
 import { useState } from "react";
 import { useAppData } from "../providers";
-import { currentMonthLabel, todayIso } from "../lib/format";
+import { currentMonthLabel, formatMoney, todayIso } from "../lib/format";
+import {
+  dayOfMonth,
+  daysInMonth,
+  envelopeBudget,
+  envelopeSpent,
+  leftToSpend,
+  paceFraction,
+  totalSpent,
+} from "../lib/selectors";
 import AddTransactionSheet from "./add-transaction-sheet";
+import ProgressBar from "./progress-bar";
 import TransactionRow from "./transaction-row";
 
 function EmptyCard({
@@ -28,11 +38,28 @@ function EmptyCard({
 }
 
 export default function PhoneHome() {
-  const { transactions, categories } = useAppData();
+  const { transactions, categories, envelopes, monthBudgets } = useAppData();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const today = todayIso();
+  const month = today.slice(0, 7);
   const todaysTransactions = transactions.filter((t) => t.date === today);
+
+  const budget = monthBudgets[month] ?? 0;
+  const hasBudget = budget > 0;
+  const spent = totalSpent(transactions, month);
+  const left = leftToSpend(budget, transactions, month);
+  const over = left < 0;
+  const spentPercent = hasBudget ? (spent / budget) * 100 : 0;
+  const pacePercent = paceFraction(month) * 100;
+
+  const budgetedEnvelopes = categories
+    .map((c) => ({
+      category: c,
+      budget: envelopeBudget(envelopes, c.id, month),
+      spent: envelopeSpent(transactions, c.id, month),
+    }))
+    .filter((e) => e.budget > 0);
 
   return (
     <div className="flex min-h-dvh flex-col bg-surface">
@@ -50,7 +77,7 @@ export default function PhoneHome() {
           </h1>
         </div>
         <div className="rounded-pill border border-card-border bg-card px-3 py-1.5 text-[12px] font-medium text-text-secondary">
-          Day — / —
+          Day {dayOfMonth(month)} / {daysInMonth(month)}
         </div>
       </header>
 
@@ -61,14 +88,24 @@ export default function PhoneHome() {
           <p className="text-[13px] font-medium text-text-secondary">
             Left to spend this month
           </p>
-          <p className="font-display-phone mt-1 text-[54px] leading-none font-semibold tracking-[-0.02em] text-text-primary">
-            $—
+          <p
+            className={`font-display-phone mt-1 text-[54px] leading-none font-semibold tracking-[-0.02em] ${
+              hasBudget && over ? "text-clay" : "text-text-primary"
+            }`}
+          >
+            {hasBudget ? formatMoney(left) : "$—"}
           </p>
           <p className="mt-2 text-[12.5px] text-text-muted">
-            of $— budgeted
+            {hasBudget
+              ? `${formatMoney(spent)} spent of ${formatMoney(budget)} budgeted`
+              : "of $— budgeted"}
           </p>
-          <div className="mt-4 h-2 w-full rounded-full bg-green-ghost">
-            <div className="h-2 w-0 rounded-full bg-green-fill" />
+          <div className="mt-4">
+            <ProgressBar
+              fillPercent={spentPercent}
+              over={over}
+              pacePercent={hasBudget ? pacePercent : undefined}
+            />
           </div>
         </section>
 
@@ -79,10 +116,41 @@ export default function PhoneHome() {
               Envelopes
             </h2>
           </div>
-          <EmptyCard
-            title="No envelopes yet"
-            hint="Categories you budget for will show up here."
-          />
+          {budgetedEnvelopes.length === 0 ? (
+            <EmptyCard
+              title="No envelopes yet"
+              hint="Categories you budget for will show up here."
+            />
+          ) : (
+            <section className="space-y-3 rounded-card border border-card-border bg-card p-4">
+              {budgetedEnvelopes.map(({ category, budget, spent }) => {
+                const isOver = spent > budget;
+                return (
+                  <div key={category.id}>
+                    <div className="mb-1 flex items-center justify-between text-[12.5px]">
+                      <span className="flex items-center gap-1.5 font-medium text-text-primary">
+                        <span
+                          className="h-2 w-2 rounded-full"
+                          style={{ background: category.color }}
+                        />
+                        {category.name}
+                      </span>
+                      <span
+                        className={isOver ? "text-clay" : "text-text-muted"}
+                      >
+                        {formatMoney(spent)} / {formatMoney(budget)}
+                      </span>
+                    </div>
+                    <ProgressBar
+                      thin
+                      fillPercent={(spent / budget) * 100}
+                      over={isOver}
+                    />
+                  </div>
+                );
+              })}
+            </section>
+          )}
         </section>
 
         {/* Owed to me */}

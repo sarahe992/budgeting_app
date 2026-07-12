@@ -6,6 +6,7 @@ const KEYS = {
   categories: "budget-app:v1:categories",
   envelopes: "budget-app:v1:envelopes",
   accounts: "budget-app:v1:accounts",
+  monthBudgets: "budget-app:v1:month-budgets",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -52,6 +53,15 @@ export function loadAccounts(): Account[] {
   return read(KEYS.accounts, DEFAULT_ACCOUNTS);
 }
 
+/** Total budget target per month ("YYYY-MM" -> dollars), set on the laptop. */
+export function loadMonthBudgets(): Record<string, number> {
+  return read(KEYS.monthBudgets, {});
+}
+
+export function saveMonthBudgets(monthBudgets: Record<string, number>) {
+  write(KEYS.monthBudgets, monthBudgets);
+}
+
 export function exportBackup() {
   const backup = {
     exportedAt: new Date().toISOString(),
@@ -59,6 +69,7 @@ export function exportBackup() {
     categories: loadCategories(),
     envelopes: loadEnvelopes(),
     accounts: loadAccounts(),
+    monthBudgets: loadMonthBudgets(),
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], {
     type: "application/json",
