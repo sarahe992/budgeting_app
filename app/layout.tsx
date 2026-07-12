@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fredoka, Manrope, Hanken_Grotesk } from "next/font/google";
+import { AppDataProvider } from "./providers";
 import "./globals.css";
 
 const fredoka = Fredoka({
@@ -52,7 +53,9 @@ export default function RootLayout({
       lang="en"
       className={`${fredoka.variable} ${manrope.variable} ${hanken.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AppDataProvider>{children}</AppDataProvider>
+      </body>
     </html>
   );
 }

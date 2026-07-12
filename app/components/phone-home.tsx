@@ -1,3 +1,11 @@
+"use client";
+
+import { useState } from "react";
+import { useAppData } from "../providers";
+import { currentMonthLabel, todayIso } from "../lib/format";
+import AddTransactionSheet from "./add-transaction-sheet";
+import TransactionRow from "./transaction-row";
+
 function EmptyCard({
   title,
   hint,
@@ -20,6 +28,12 @@ function EmptyCard({
 }
 
 export default function PhoneHome() {
+  const { transactions, categories } = useAppData();
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const today = todayIso();
+  const todaysTransactions = transactions.filter((t) => t.date === today);
+
   return (
     <div className="flex min-h-dvh flex-col bg-surface">
       {/* App bar */}
@@ -32,7 +46,7 @@ export default function PhoneHome() {
             Monthly
           </p>
           <h1 className="font-display-phone text-2xl font-medium text-text-primary">
-            June 2026
+            {currentMonthLabel()}
           </h1>
         </div>
         <div className="rounded-pill border border-card-border bg-card px-3 py-1.5 text-[12px] font-medium text-text-secondary">
@@ -84,10 +98,22 @@ export default function PhoneHome() {
               Today
             </h2>
           </div>
-          <EmptyCard
-            title="No transactions yet"
-            hint="Tap the + button below to add your first charge."
-          />
+          {todaysTransactions.length === 0 ? (
+            <EmptyCard
+              title="No transactions yet"
+              hint="Tap the + button below to add your first charge."
+            />
+          ) : (
+            <section className="divide-y divide-card-border rounded-card border border-card-border bg-card px-4">
+              {todaysTransactions.map((t) => (
+                <TransactionRow
+                  key={t.id}
+                  transaction={t}
+                  category={categories.find((c) => c.id === t.categoryId)}
+                />
+              ))}
+            </section>
+          )}
         </section>
       </main>
 
@@ -109,6 +135,7 @@ export default function PhoneHome() {
         <button
           type="button"
           aria-label="Add transaction"
+          onClick={() => setSheetOpen(true)}
           className="flex items-center justify-center rounded-button bg-green text-card shadow-raised"
           style={{ height: 52, width: 52 }}
         >
@@ -121,6 +148,8 @@ export default function PhoneHome() {
           <span className="h-2.5 w-2.5 rounded-full bg-text-muted" />
         </button>
       </nav>
+
+      {sheetOpen && <AddTransactionSheet onClose={() => setSheetOpen(false)} />}
     </div>
   );
 }

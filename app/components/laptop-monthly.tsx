@@ -1,3 +1,12 @@
+"use client";
+
+import { useState } from "react";
+import { useAppData } from "../providers";
+import { currentMonthLabel, todayIso } from "../lib/format";
+import AddTransactionSheet from "./add-transaction-sheet";
+import LaptopSidebar from "./laptop-sidebar";
+import TransactionRow from "./transaction-row";
+
 function Card({
   title,
   hint,
@@ -22,62 +31,18 @@ function Card({
   );
 }
 
-const NAV_ITEMS = ["Monthly", "Yearly", "Trips", "Goals", "Settings"];
-
 export default function LaptopMonthly() {
+  const { transactions, categories } = useAppData();
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const currentMonth = todayIso().slice(0, 7); // "YYYY-MM"
+  const monthTransactions = transactions.filter((t) =>
+    t.date.startsWith(currentMonth)
+  );
+
   return (
     <div className="flex min-h-dvh bg-cream">
-      {/* Sidebar */}
-      <aside className="flex w-[236px] shrink-0 flex-col justify-between border-r border-card-border bg-sidebar p-4">
-        <div>
-          <div className="flex items-center gap-2 px-1 pb-6">
-            <span className="flex h-8 w-8 items-center justify-center rounded-button bg-green font-display-laptop text-sm font-semibold text-card">
-              B
-            </span>
-            <span className="font-display-laptop text-sm font-semibold text-text-primary">
-              Budget
-            </span>
-          </div>
-
-          <nav className="flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item}
-                type="button"
-                aria-current={item === "Monthly" ? "page" : undefined}
-                className={`rounded-button px-3 py-2 text-left text-[13px] font-medium ${
-                  item === "Monthly"
-                    ? "bg-green text-card"
-                    : "text-text-secondary hover:bg-card"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </nav>
-
-          <div className="mt-6 rounded-card border border-card-border bg-card p-3">
-            <p className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-text-muted">
-              Accounts
-            </p>
-            <div className="mt-2 flex items-center justify-between text-[12.5px]">
-              <span className="text-text-secondary">Checking</span>
-              <span className="text-text-primary">$—</span>
-            </div>
-            <div className="mt-1 flex items-center justify-between text-[12.5px]">
-              <span className="text-text-secondary">Savings</span>
-              <span className="text-text-primary">$—</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 rounded-button p-2">
-          <span className="h-7 w-7 rounded-full bg-card-border" />
-          <span className="text-[12.5px] font-medium text-text-secondary">
-            —
-          </span>
-        </div>
-      </aside>
+      <LaptopSidebar active="Monthly" />
 
       {/* Main content */}
       <div className="flex-1 space-y-4 p-6">
@@ -88,11 +53,12 @@ export default function LaptopMonthly() {
               Monthly
             </p>
             <h1 className="font-display-laptop text-xl font-medium text-text-primary">
-              June 2026
+              {currentMonthLabel()}
             </h1>
           </div>
           <button
             type="button"
+            onClick={() => setSheetOpen(true)}
             className="rounded-button bg-green px-4 py-2 text-[13px] font-medium text-card"
             style={{ height: 38 }}
           >
@@ -205,9 +171,21 @@ export default function LaptopMonthly() {
           </Card>
 
           <Card title="Recent transactions">
-            <p className="mt-3 text-[12.5px] text-text-muted">
-              No transactions yet.
-            </p>
+            {monthTransactions.length === 0 ? (
+              <p className="mt-3 text-[12.5px] text-text-muted">
+                No transactions yet.
+              </p>
+            ) : (
+              <div className="mt-3 max-h-64 divide-y divide-card-border overflow-y-auto">
+                {monthTransactions.map((t) => (
+                  <TransactionRow
+                    key={t.id}
+                    transaction={t}
+                    category={categories.find((c) => c.id === t.categoryId)}
+                  />
+                ))}
+              </div>
+            )}
             <div className="mt-4 grid grid-cols-3 gap-2 border-t border-card-border pt-3 text-[12px]">
               <div>
                 <p className="text-text-muted">Out of pocket</p>
@@ -225,6 +203,10 @@ export default function LaptopMonthly() {
           </Card>
         </div>
       </div>
+
+      {sheetOpen && (
+        <AddTransactionSheet onClose={() => setSheetOpen(false)} />
+      )}
     </div>
   );
 }

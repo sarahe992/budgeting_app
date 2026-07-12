@@ -1,0 +1,37 @@
+export type AccountId = "checking" | "savings";
+
+export interface Account {
+  id: AccountId;
+  name: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  color: string;
+}
+
+/** Per-category monthly budget assignment. Budget UI ships in Session 3 — for now this defaults to 0. */
+export interface Envelope {
+  id: string;
+  categoryId: string;
+  month: string; // "YYYY-MM"
+  budget: number;
+}
+
+export type TransactionType = "spending" | "income" | "transfer";
+
+export interface Transaction {
+  id: string;
+  date: string; // ISO date "YYYY-MM-DD"
+  name: string;
+  amount: number;
+  categoryId: string | null;
+  accountId: AccountId;
+  type: TransactionType;
+  reimbursable: boolean;
+  reimbAmt: number;
+  reimbPaid: boolean;
+  tags: string[];
+  notes: string;
+}
