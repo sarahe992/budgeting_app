@@ -63,9 +63,14 @@ export default function LaptopMonthly() {
   const activeGoal = goals[goalIdx];
 
   const month = todayIso().slice(0, 7); // "YYYY-MM"
-  const monthTransactions = transactions.filter((t) =>
-    t.date.startsWith(month)
-  );
+
+  // Not month-scoped on purpose — right after a CSV import spanning several
+  // months, this should still show what actually came in, not just this
+  // calendar month's slice. The budget/envelope math below stays monthly.
+  const recentTransactions = transactions
+    .slice()
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 50);
 
   const budget = monthBudgets[month] ?? 0;
   const hasBudget = budget > 0;
@@ -345,13 +350,13 @@ export default function LaptopMonthly() {
           </Card>
 
           <Card title="Recent transactions">
-            {monthTransactions.length === 0 ? (
+            {recentTransactions.length === 0 ? (
               <p className="mt-3 text-[12.5px] text-text-muted">
                 No transactions yet.
               </p>
             ) : (
               <div className="mt-3 max-h-64 divide-y divide-card-border overflow-y-auto">
-                {monthTransactions.map((t) => (
+                {recentTransactions.map((t) => (
                   <TransactionRow
                     key={t.id}
                     transaction={t}
