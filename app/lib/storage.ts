@@ -1,5 +1,13 @@
 import { DEFAULT_ACCOUNTS, STARTER_CATEGORIES } from "./categories";
-import type { Account, Category, Envelope, Goal, Transaction } from "./types";
+import { STARTER_RULES } from "./rules";
+import type {
+  Account,
+  Category,
+  CategoryRule,
+  Envelope,
+  Goal,
+  Transaction,
+} from "./types";
 
 const KEYS = {
   transactions: "budget-app:v1:transactions",
@@ -8,6 +16,7 @@ const KEYS = {
   accounts: "budget-app:v1:accounts",
   monthBudgets: "budget-app:v1:month-budgets",
   goals: "budget-app:v1:goals",
+  rules: "budget-app:v1:rules",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -71,6 +80,14 @@ export function saveGoals(goals: Goal[]) {
   write(KEYS.goals, goals);
 }
 
+export function loadRules(): CategoryRule[] {
+  return read(KEYS.rules, STARTER_RULES);
+}
+
+export function saveRules(rules: CategoryRule[]) {
+  write(KEYS.rules, rules);
+}
+
 export function exportBackup() {
   const backup = {
     exportedAt: new Date().toISOString(),
@@ -80,6 +97,7 @@ export function exportBackup() {
     accounts: loadAccounts(),
     monthBudgets: loadMonthBudgets(),
     goals: loadGoals(),
+    rules: loadRules(),
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], {
     type: "application/json",

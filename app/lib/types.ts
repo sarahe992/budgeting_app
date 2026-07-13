@@ -29,6 +29,12 @@ export interface Transaction {
   categoryId: string | null;
   accountId: AccountId;
   type: TransactionType;
+  /**
+   * Whether money entered or left `accountId`. Always "out" for spending and
+   * "in" for income; meaningful mainly for transfers, which can go either
+   * way (e.g. money leaving savings to pay a bill isn't "money saved").
+   */
+  direction: "in" | "out";
   reimbursable: boolean;
   reimbAmt: number;
   reimbPaid: boolean;
@@ -48,4 +54,11 @@ export interface Goal {
   type: GoalType;
   /** Internal bookkeeping used to pace on/off-track — not shown in the UI. */
   createdAt: string;
+}
+
+/** Auto-categorization rule applied during CSV import: first case-insensitive keyword match wins. */
+export interface CategoryRule {
+  id: string;
+  keyword: string;
+  categoryId: string;
 }

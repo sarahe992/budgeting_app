@@ -9,21 +9,25 @@ import {
   type ReactNode,
 } from "react";
 import { DEFAULT_ACCOUNTS, STARTER_CATEGORIES } from "./lib/categories";
+import { STARTER_RULES } from "./lib/rules";
 import {
   loadCategories,
   loadEnvelopes,
   loadGoals,
   loadMonthBudgets,
+  loadRules,
   loadTransactions,
   saveCategories,
   saveEnvelopes,
   saveGoals,
   saveMonthBudgets,
+  saveRules,
   saveTransactions,
 } from "./lib/storage";
 import type {
   Account,
   Category,
+  CategoryRule,
   Envelope,
   Goal,
   Transaction,
@@ -36,7 +40,9 @@ interface AppData {
   accounts: Account[];
   monthBudgets: Record<string, number>;
   goals: Goal[];
+  rules: CategoryRule[];
   addTransaction: (tx: Omit<Transaction, "id">) => void;
+  importTransactions: (txs: Omit<Transaction, "id">[]) => void;
   setCategories: (categories: Category[]) => void;
   setEnvelopeBudget: (categoryId: string, month: string, budget: number) => void;
   setMonthBudget: (month: string, budget: number) => void;
@@ -44,6 +50,7 @@ interface AppData {
   updateGoal: (id: string, patch: Partial<Omit<Goal, "id" | "createdAt">>) => void;
   deleteGoal: (id: string) => void;
   contributeToGoal: (id: string, amount: number) => void;
+  setRules: (rules: CategoryRule[]) => void;
 }
 
 interface HydratedState {
@@ -52,6 +59,11 @@ interface HydratedState {
   envelopes: Envelope[];
   monthBudgets: Record<string, number>;
   goals: Goal[];
+  rules: CategoryRule[];
+}
+
+function makeTxnId(): string {
+  return `txn_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
 const AppDataContext = createContext<AppData | null>(null);
@@ -63,6 +75,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     envelopes: [],
     monthBudgets: {},
     goals: [],
+    rules: STARTER_RULES,
   });
   const [accounts] = useState<Account[]>(DEFAULT_ACCOUNTS);
   const hydrated = useRef(false);
@@ -79,6 +92,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       envelopes: loadEnvelopes(),
       monthBudgets: loadMonthBudgets(),
       goals: loadGoals(),
+      rules: loadRules(),
     });
     hydrated.current = true;
   }, []);
@@ -90,13 +104,21 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     saveEnvelopes(state.envelopes);
     saveMonthBudgets(state.monthBudgets);
     saveGoals(state.goals);
+    saveRules(state.rules);
   }, [state]);
 
   function addTransaction(tx: Omit<Transaction, "id">) {
-    const id = `txn_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     setState((prev) => ({
       ...prev,
-      transactions: [{ ...tx, id }, ...prev.transactions],
+      transactions: [{ ...tx, id: makeTxnId() }, ...prev.transactions],
+    }));
+  }
+
+  function importTransactions(txs: Omit<Transaction, "id">[]) {
+    const withIds = txs.map((tx) => ({ ...tx, id: makeTxnId() }));
+    setState((prev) => ({
+      ...prev,
+      transactions: [...withIds, ...prev.transactions],
     }));
   }
 
@@ -160,6 +182,10 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     }));
   }
 
+  function setRules(rules: CategoryRule[]) {
+    setState((prev) => ({ ...prev, rules }));
+  }
+
   return (
     <AppDataContext.Provider
       value={{
@@ -169,7 +195,9 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         accounts,
         monthBudgets: state.monthBudgets,
         goals: state.goals,
+        rules: state.rules,
         addTransaction,
+        importTransactions,
         setCategories,
         setEnvelopeBudget,
         setMonthBudget,
@@ -177,6 +205,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         updateGoal,
         deleteGoal,
         contributeToGoal,
+        setRules,
       }}
     >
       {children}

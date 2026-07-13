@@ -45,13 +45,14 @@ export function totalIncome(transactions: Transaction[], month: string): number 
     .reduce((sum, t) => sum + t.amount, 0);
 }
 
-/** Money moved to savings this month (transfers into the savings account). */
+/** Money moved to savings this month (transfers arriving in the savings account). */
 export function totalSaved(transactions: Transaction[], month: string): number {
   return transactions
     .filter(
       (t) =>
         t.type === "transfer" &&
         t.accountId === "savings" &&
+        t.direction === "in" &&
         t.date.startsWith(month)
     )
     .reduce((sum, t) => sum + t.amount, 0);

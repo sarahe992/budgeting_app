@@ -20,6 +20,7 @@ export default function AddTransactionSheet({
   );
   const [accountId, setAccountId] = useState<AccountId>("checking");
   const [type, setType] = useState<TransactionType>("spending");
+  const [transferDirection, setTransferDirection] = useState<"in" | "out">("out");
 
   function pressKey(key: string) {
     if (key === "⌫") {
@@ -36,6 +37,8 @@ export default function AddTransactionSheet({
 
   function handleSubmit() {
     if (!canSubmit) return;
+    const direction =
+      type === "spending" ? "out" : type === "income" ? "in" : transferDirection;
     addTransaction({
       date: todayIso(),
       name: name.trim(),
@@ -43,6 +46,7 @@ export default function AddTransactionSheet({
       categoryId: type === "spending" ? categoryId : null,
       accountId,
       type,
+      direction,
       reimbursable: false,
       reimbAmt: 0,
       reimbPaid: false,
@@ -121,6 +125,26 @@ export default function AddTransactionSheet({
             </button>
           ))}
         </div>
+
+        {/* Transfer direction */}
+        {type === "transfer" && (
+          <div className="mt-3 flex gap-2 rounded-button bg-card p-1">
+            {(["out", "in"] as const).map((d) => (
+              <button
+                key={d}
+                type="button"
+                onClick={() => setTransferDirection(d)}
+                className={`flex-1 rounded-button py-1.5 text-[12.5px] font-medium ${
+                  transferDirection === d
+                    ? "bg-green text-card"
+                    : "text-text-secondary"
+                }`}
+              >
+                {d === "out" ? `Leaving ${accountId}` : `Arriving in ${accountId}`}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Category picker */}
         {type === "spending" && (
