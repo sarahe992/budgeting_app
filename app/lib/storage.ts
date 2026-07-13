@@ -1,5 +1,5 @@
 import { DEFAULT_ACCOUNTS, STARTER_CATEGORIES } from "./categories";
-import type { Account, Category, Envelope, Transaction } from "./types";
+import type { Account, Category, Envelope, Goal, Transaction } from "./types";
 
 const KEYS = {
   transactions: "budget-app:v1:transactions",
@@ -7,6 +7,7 @@ const KEYS = {
   envelopes: "budget-app:v1:envelopes",
   accounts: "budget-app:v1:accounts",
   monthBudgets: "budget-app:v1:month-budgets",
+  goals: "budget-app:v1:goals",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -62,6 +63,14 @@ export function saveMonthBudgets(monthBudgets: Record<string, number>) {
   write(KEYS.monthBudgets, monthBudgets);
 }
 
+export function loadGoals(): Goal[] {
+  return read(KEYS.goals, []);
+}
+
+export function saveGoals(goals: Goal[]) {
+  write(KEYS.goals, goals);
+}
+
 export function exportBackup() {
   const backup = {
     exportedAt: new Date().toISOString(),
@@ -70,6 +79,7 @@ export function exportBackup() {
     envelopes: loadEnvelopes(),
     accounts: loadAccounts(),
     monthBudgets: loadMonthBudgets(),
+    goals: loadGoals(),
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], {
     type: "application/json",

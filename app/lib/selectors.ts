@@ -1,4 +1,4 @@
-import type { Envelope, Transaction } from "./types";
+import type { Envelope, Goal, Transaction } from "./types";
 
 export function daysInMonth(month: string): number {
   const [y, m] = month.split("-").map(Number);
@@ -104,4 +104,23 @@ export function safeToSpendPerWeek(
     daysInMonth(month) - dayOfMonth(month) + 1
   );
   return left / (remainingDays / 7);
+}
+
+/** Fraction (0–1) of a goal's createdAt→deadline window that has elapsed. */
+export function goalElapsedFraction(goal: Goal): number {
+  if (!goal.deadline) return 1;
+  const start = new Date(goal.createdAt).getTime();
+  const end = new Date(goal.deadline).getTime();
+  if (end <= start) return 1;
+  return Math.max(0, Math.min(1, (Date.now() - start) / (end - start)));
+}
+
+/**
+ * A goal with no deadline can't be behind pace. Otherwise, on track means
+ * saved-so-far is at or ahead of what a linear pace toward the deadline
+ * would require by now.
+ */
+export function goalOnTrack(goal: Goal): boolean {
+  if (!goal.deadline || goal.saved >= goal.total) return true;
+  return goal.saved >= goal.total * goalElapsedFraction(goal);
 }

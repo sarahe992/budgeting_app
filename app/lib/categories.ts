@@ -5,6 +5,26 @@ export const DEFAULT_ACCOUNTS: Account[] = [
   { id: "savings", name: "Savings" },
 ];
 
+export const DOT_COLORS = [
+  "var(--color-dot-groceries)",
+  "var(--color-dot-out-to-eat)",
+  "var(--color-dot-activities)",
+  "var(--color-dot-transportation)",
+  "var(--color-dot-gas)",
+  "var(--color-dot-household)",
+  "var(--color-dot-social-gifts)",
+  "var(--color-ochre)",
+];
+
+// The design system names three goal accents explicitly; extend with the
+// category dot palette so additional goals still get a distinct color.
+export const GOAL_ACCENT_COLORS = [
+  "var(--color-goal-emergency)",
+  "var(--color-goal-mexico)",
+  "var(--color-goal-laptop)",
+  ...DOT_COLORS,
+];
+
 // Starter set from PRD Section 6, colored with the design system's category dot tokens.
 export const STARTER_CATEGORIES: Category[] = [
   { id: "household-groceries", name: "Household / Groceries", color: "var(--color-dot-groceries)" },

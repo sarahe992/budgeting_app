@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useAppData } from "../providers";
 import { currentMonthLabel, formatMoney, todayIso } from "../lib/format";
 import {
@@ -51,10 +52,15 @@ export default function LaptopMonthly() {
     categories,
     envelopes,
     monthBudgets,
+    goals,
     setEnvelopeBudget,
     setMonthBudget,
+    contributeToGoal,
   } = useAppData();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [activeGoalIdx, setActiveGoalIdx] = useState(0);
+  const goalIdx = goals.length ? ((activeGoalIdx % goals.length) + goals.length) % goals.length : 0;
+  const activeGoal = goals[goalIdx];
 
   const month = todayIso().slice(0, 7); // "YYYY-MM"
   const monthTransactions = transactions.filter((t) =>
@@ -154,26 +160,88 @@ export default function LaptopMonthly() {
             </div>
           </Card>
 
-          <Card title="Savings goal">
-            <div className="mt-3 flex items-center justify-center">
-              <div
-                className="flex h-28 w-28 items-center justify-center rounded-full"
-                style={{
-                  background:
-                    "conic-gradient(var(--color-green-ghost) 0deg 360deg)",
-                }}
-              >
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-card text-[13px] font-medium text-text-primary">
-                  $—
+          <Card title="Savings goal" className="relative">
+            {goals.length === 0 ? (
+              <p className="mt-3 text-[12px] text-text-muted">
+                No goals yet — create one on the{" "}
+                <Link href="/goals" className="text-green underline">
+                  Goals
+                </Link>{" "}
+                page.
+              </p>
+            ) : (
+              <>
+                <div className="mt-1 flex items-center justify-between">
+                  <button
+                    type="button"
+                    aria-label="Previous goal"
+                    onClick={() => setActiveGoalIdx((i) => i - 1)}
+                    className="flex h-6 w-6 items-center justify-center rounded-button text-text-muted hover:bg-surface"
+                  >
+                    ‹
+                  </button>
+                  <span className="truncate px-2 text-[12.5px] font-medium text-text-primary">
+                    {activeGoal.name}
+                  </span>
+                  <button
+                    type="button"
+                    aria-label="Next goal"
+                    onClick={() => setActiveGoalIdx((i) => i + 1)}
+                    className="flex h-6 w-6 items-center justify-center rounded-button text-text-muted hover:bg-surface"
+                  >
+                    ›
+                  </button>
                 </div>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="mt-4 w-full rounded-button bg-green py-2 text-[12.5px] font-medium text-card"
-            >
-              + Add $250
-            </button>
+
+                <div className="mt-2 flex items-center justify-center">
+                  <div
+                    className="flex h-28 w-28 items-center justify-center rounded-full transition-[background] duration-500"
+                    style={{
+                      background: `conic-gradient(${activeGoal.accent} ${Math.min(100, (activeGoal.saved / activeGoal.total) * 100)}%, var(--color-green-ghost) ${Math.min(100, (activeGoal.saved / activeGoal.total) * 100)}% 100%)`,
+                    }}
+                  >
+                    <div className="flex h-20 w-20 flex-col items-center justify-center rounded-full bg-card text-center">
+                      <span className="text-[13px] font-medium text-text-primary">
+                        {formatMoney(activeGoal.saved)}
+                      </span>
+                      <span className="text-[10px] text-text-muted">
+                        of {formatMoney(activeGoal.total)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="mt-2 text-center text-[11.5px] text-text-muted">
+                  {activeGoal.saved >= activeGoal.total
+                    ? "Ring closed — goal reached."
+                    : `${Math.round((activeGoal.saved / activeGoal.total) * 100)}% there · ${formatMoney(activeGoal.total - activeGoal.saved)} to close the ring`}
+                </p>
+
+                <div className="mt-3 flex items-center justify-center gap-1.5">
+                  {goals.map((g, i) => (
+                    <button
+                      key={g.id}
+                      type="button"
+                      aria-label={`Show ${g.name}`}
+                      onClick={() => setActiveGoalIdx(i)}
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{
+                        background:
+                          i === goalIdx ? "var(--color-text-primary)" : "var(--color-card-border)",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => contributeToGoal(activeGoal.id, 250)}
+                  className="mt-4 w-full rounded-button bg-green py-2 text-[12.5px] font-medium text-card"
+                >
+                  + Add $250
+                </button>
+              </>
+            )}
           </Card>
         </div>
 

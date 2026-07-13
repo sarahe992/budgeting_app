@@ -2,19 +2,9 @@
 
 import { useState } from "react";
 import { useAppData } from "../providers";
+import { DOT_COLORS } from "../lib/categories";
 import { exportBackup } from "../lib/storage";
 import LaptopSidebar from "./laptop-sidebar";
-
-const DOT_COLORS = [
-  "var(--color-dot-groceries)",
-  "var(--color-dot-out-to-eat)",
-  "var(--color-dot-activities)",
-  "var(--color-dot-transportation)",
-  "var(--color-dot-gas)",
-  "var(--color-dot-household)",
-  "var(--color-dot-social-gifts)",
-  "var(--color-ochre)",
-];
 
 export default function SettingsPage() {
   const { categories, setCategories } = useAppData();

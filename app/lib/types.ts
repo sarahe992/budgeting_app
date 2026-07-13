@@ -35,3 +35,17 @@ export interface Transaction {
   tags: string[];
   notes: string;
 }
+
+export type GoalType = "monthly" | "summer" | "yearly" | "wealth";
+
+export interface Goal {
+  id: string;
+  name: string;
+  total: number;
+  saved: number;
+  accent: string;
+  deadline: string | null; // ISO date "YYYY-MM-DD"
+  type: GoalType;
+  /** Internal bookkeeping used to pace on/off-track — not shown in the UI. */
+  createdAt: string;
+}

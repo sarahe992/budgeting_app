@@ -6,14 +6,14 @@ const NAV_ITEMS: { label: string; href: string | null }[] = [
   { label: "Monthly", href: "/" },
   { label: "Yearly", href: null },
   { label: "Trips", href: null },
-  { label: "Goals", href: null },
+  { label: "Goals", href: "/goals" },
   { label: "Settings", href: "/settings" },
 ];
 
 export default function LaptopSidebar({
   active,
 }: {
-  active: "Monthly" | "Settings";
+  active: "Monthly" | "Settings" | "Goals";
 }) {
   return (
     <aside className="flex w-[236px] shrink-0 flex-col justify-between border-r border-card-border bg-sidebar p-4">

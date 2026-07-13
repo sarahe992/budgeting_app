@@ -8,6 +8,7 @@ import {
   daysInMonth,
   envelopeBudget,
   envelopeSpent,
+  goalOnTrack,
   leftToSpend,
   paceFraction,
   totalSpent,
@@ -38,7 +39,8 @@ function EmptyCard({
 }
 
 export default function PhoneHome() {
-  const { transactions, categories, envelopes, monthBudgets } = useAppData();
+  const { transactions, categories, envelopes, monthBudgets, goals } =
+    useAppData();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const today = todayIso();
@@ -60,6 +62,15 @@ export default function PhoneHome() {
       spent: envelopeSpent(transactions, c.id, month),
     }))
     .filter((e) => e.budget > 0);
+
+  const activeGoals = goals
+    .filter((g) => g.saved < g.total)
+    .sort((a, b) => {
+      if (!a.deadline) return 1;
+      if (!b.deadline) return -1;
+      return a.deadline.localeCompare(b.deadline);
+    })
+    .slice(0, 3);
 
   return (
     <div className="flex min-h-dvh flex-col bg-surface">
@@ -180,6 +191,63 @@ export default function PhoneHome() {
                   category={categories.find((c) => c.id === t.categoryId)}
                 />
               ))}
+            </section>
+          )}
+        </section>
+
+        {/* Goals */}
+        <section>
+          <div className="mb-2 flex items-center justify-between px-1">
+            <h2 className="font-display-phone text-[15px] font-medium text-text-primary">
+              Goals
+            </h2>
+          </div>
+          {activeGoals.length === 0 ? (
+            <EmptyCard
+              title="No goals yet"
+              hint="Create a savings goal on your laptop under Goals."
+            />
+          ) : (
+            <section className="space-y-3 rounded-card border border-card-border bg-card p-4">
+              {activeGoals.map((g) => {
+                const pct = Math.min(100, (g.saved / g.total) * 100);
+                const onTrack = goalOnTrack(g);
+                return (
+                  <div key={g.id}>
+                    <div className="mb-1 flex items-center justify-between gap-2 text-[12.5px]">
+                      <span className="flex min-w-0 items-center gap-1.5 font-medium text-text-primary">
+                        <span
+                          className="h-2 w-2 shrink-0 rounded-full"
+                          style={{ background: g.accent }}
+                        />
+                        <span className="truncate">{g.name}</span>
+                      </span>
+                      <span className="flex shrink-0 items-center gap-1.5">
+                        <span className="text-text-muted">
+                          {formatMoney(g.saved)} / {formatMoney(g.total)}
+                        </span>
+                        {g.deadline && (
+                          <span
+                            className={`rounded-pill px-1.5 py-0.5 text-[10px] font-medium ${
+                              onTrack
+                                ? "bg-green-ghost text-green-deep"
+                                : "bg-clay-badge text-clay"
+                            }`}
+                          >
+                            {onTrack ? "On track" : "Behind"}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-green-ghost">
+                      <div
+                        className="h-full rounded-full"
+                        style={{ width: `${pct}%`, background: g.accent }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </section>
           )}
         </section>
