@@ -20,7 +20,9 @@ import AddTransactionSheet from "./add-transaction-sheet";
 import BudgetInput from "./budget-input";
 import LaptopSidebar from "./laptop-sidebar";
 import ProgressBar from "./progress-bar";
+import SpendingDonut from "./spending-donut";
 import TransactionRow from "./transaction-row";
+import TrendChart from "./trend-chart";
 
 function Card({
   title,
@@ -150,19 +152,7 @@ export default function LaptopMonthly() {
           </Card>
 
           <Card title="Spending by category">
-            <div className="mt-3 flex items-center gap-4">
-              <div
-                className="h-28 w-28 shrink-0 rounded-full"
-                style={{
-                  background:
-                    "conic-gradient(var(--color-green-ghost) 0deg 360deg)",
-                }}
-              />
-              <p className="text-[12px] text-text-muted">
-                No spending yet — categories will appear here once you add
-                transactions.
-              </p>
-            </div>
+            <SpendingDonut month={month} />
           </Card>
 
           <Card title="Savings goal" className="relative">
@@ -334,19 +324,7 @@ export default function LaptopMonthly() {
         {/* Bottom row: trend chart / recent transactions */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_420px]">
           <Card title="Income · Spending · Saved">
-            <div className="mt-4 flex h-40 items-end justify-around border-b border-card-border">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-6 rounded-t bg-green-ghost"
-                  style={{ height: "12%" }}
-                />
-              ))}
-            </div>
-            <p className="mt-2 text-[12px] text-text-muted">
-              No data yet — this fills in once you have a few months of
-              transactions.
-            </p>
+            <TrendChart currentMonth={month} />
           </Card>
 
           <Card title="Recent transactions">

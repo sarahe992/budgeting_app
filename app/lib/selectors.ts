@@ -18,6 +18,22 @@ export function paceFraction(month: string): number {
   return Math.min(1, dayOfMonth(month) / daysInMonth(month));
 }
 
+/** The `n` months ending at (and including) `endMonth`, oldest first. */
+export function lastNMonths(n: number, endMonth: string): string[] {
+  const [y, m] = endMonth.split("-").map(Number);
+  const months: string[] = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(y, m - 1 - i, 1);
+    months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
+  }
+  return months;
+}
+
+export function monthShortLabel(month: string): string {
+  const [y, m] = month.split("-").map(Number);
+  return new Date(y, m - 1, 1).toLocaleDateString("en-US", { month: "short" });
+}
+
 export function envelopeSpent(
   transactions: Transaction[],
   categoryId: string,
