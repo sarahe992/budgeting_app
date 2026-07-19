@@ -75,8 +75,8 @@ export default function ImportPanel() {
         accountId: r.accountId,
         type: r.type,
         direction: r.direction,
-        reimbursable: false,
-        reimbAmt: 0,
+        reimbursable: r.reimbursable,
+        reimbAmt: r.reimbursable ? r.amount : 0,
         reimbPaid: false,
         tags: [],
         notes: "",
@@ -155,6 +155,7 @@ export default function ImportPanel() {
                     updateRow(r.key, {
                       type: nextType,
                       categoryId: nextType === "spending" ? r.categoryId : null,
+                      reimbursable: nextType === "spending" && r.reimbursable,
                       direction:
                         nextType === "spending"
                           ? "out"
@@ -184,6 +185,18 @@ export default function ImportPanel() {
                       </option>
                     ))}
                   </select>
+                )}
+                {r.type === "spending" && (
+                  <label className="flex shrink-0 items-center gap-1 text-[10.5px] text-text-muted">
+                    <input
+                      type="checkbox"
+                      checked={r.reimbursable}
+                      onChange={(e) =>
+                        updateRow(r.key, { reimbursable: e.target.checked })
+                      }
+                    />
+                    Reimb.
+                  </label>
                 )}
                 <span className="w-20 shrink-0 text-right text-[12px] font-medium text-text-primary">
                   {formatMoney(r.amount)}

@@ -5,11 +5,15 @@ import Link from "next/link";
 import { useAppData } from "../providers";
 import { currentMonthLabel, formatMoney, todayIso } from "../lib/format";
 import {
+  alreadyReimbursed,
   envelopeBudget,
   envelopeSpent,
   leftToAssign,
   leftToSpend,
+  outOfPocket,
+  owedToYou,
   paceFraction,
+  reimbursableTotal,
   safeToSpendPerWeek,
   totalAssigned,
   totalIncome,
@@ -20,6 +24,7 @@ import AddTransactionSheet from "./add-transaction-sheet";
 import BudgetInput from "./budget-input";
 import LaptopSidebar from "./laptop-sidebar";
 import ProgressBar from "./progress-bar";
+import ReimbursementControls from "./reimbursement-controls";
 import SpendingDonut from "./spending-donut";
 import TransactionRow from "./transaction-row";
 import TrendChart from "./trend-chart";
@@ -58,9 +63,11 @@ export default function LaptopMonthly() {
     setEnvelopeBudget,
     setMonthBudget,
     contributeToGoal,
+    updateTransaction,
   } = useAppData();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [activeGoalIdx, setActiveGoalIdx] = useState(0);
+  const [expandedTxnId, setExpandedTxnId] = useState<string | null>(null);
   const goalIdx = goals.length ? ((activeGoalIdx % goals.length) + goals.length) % goals.length : 0;
   const activeGoal = goals[goalIdx];
 
@@ -87,6 +94,12 @@ export default function LaptopMonthly() {
 
   const assigned = totalAssigned(envelopes, month);
   const toAssign = leftToAssign(budget, envelopes, month);
+
+  const owed = owedToYou(transactions);
+  const hasAnyReimbursable = transactions.some((t) => t.reimbursable);
+  const monthReimbursable = reimbursableTotal(transactions, month);
+  const monthOutOfPocket = outOfPocket(transactions, month);
+  const totalReimbursed = alreadyReimbursed(transactions);
 
   return (
     <div className="flex min-h-dvh bg-cream">
@@ -149,6 +162,19 @@ export default function LaptopMonthly() {
               Safe to spend per week ·{" "}
               {hasBudget ? `${formatMoney(safePerWeek)}/week` : "$—/week"}
             </div>
+            {owed > 0 ? (
+              <p className="mt-3 flex items-center gap-1.5 text-[12px] font-medium text-clay">
+                <span className="h-1.5 w-1.5 rounded-full bg-clay" />
+                {formatMoney(owed)} owed to you
+              </p>
+            ) : (
+              hasAnyReimbursable && (
+                <p className="mt-3 flex items-center gap-1.5 text-[12px] font-medium text-green-deep">
+                  <span className="h-1.5 w-1.5 rounded-full bg-green" />
+                  All reimbursed
+                </p>
+              )
+            )}
           </Card>
 
           <Card title="Spending by category">
@@ -327,7 +353,7 @@ export default function LaptopMonthly() {
             <TrendChart currentMonth={month} />
           </Card>
 
-          <Card title="Recent transactions">
+          <Card title="Recent transactions" hint="Click a row to flag it reimbursable.">
             {recentTransactions.length === 0 ? (
               <p className="mt-3 text-[12.5px] text-text-muted">
                 No transactions yet.
@@ -335,26 +361,47 @@ export default function LaptopMonthly() {
             ) : (
               <div className="mt-3 max-h-64 divide-y divide-card-border overflow-y-auto">
                 {recentTransactions.map((t) => (
-                  <TransactionRow
-                    key={t.id}
-                    transaction={t}
-                    category={categories.find((c) => c.id === t.categoryId)}
-                  />
+                  <div key={t.id}>
+                    <TransactionRow
+                      transaction={t}
+                      category={categories.find((c) => c.id === t.categoryId)}
+                      active={expandedTxnId === t.id}
+                      onClick={() =>
+                        setExpandedTxnId(expandedTxnId === t.id ? null : t.id)
+                      }
+                    />
+                    {expandedTxnId === t.id && (
+                      <div className="pb-3">
+                        <ReimbursementControls
+                          transaction={t}
+                          onUpdate={(patch) => updateTransaction(t.id, patch)}
+                        />
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             )}
             <div className="mt-4 grid grid-cols-3 gap-2 border-t border-card-border pt-3 text-[12px]">
               <div>
+                <p className="text-text-muted">Spent · Reimbursable</p>
+                <p className="text-text-primary">
+                  {formatMoney(spent)} · −{formatMoney(monthReimbursable)}
+                </p>
+              </div>
+              <div>
                 <p className="text-text-muted">Out of pocket</p>
-                <p className="text-text-primary">$—</p>
+                <p className="font-medium text-text-primary">
+                  {formatMoney(monthOutOfPocket)}
+                </p>
               </div>
-              <div>
-                <p className="text-text-muted">Owed to you</p>
-                <p className="text-clay">$—</p>
-              </div>
-              <div>
-                <p className="text-text-muted">Reimbursed</p>
-                <p className="text-green">$—</p>
+              <div className="flex flex-col items-end gap-1">
+                <span className="rounded-pill bg-clay-badge px-1.5 py-0.5 text-[10.5px] font-medium text-clay">
+                  Owed {formatMoney(owed)}
+                </span>
+                <span className="rounded-pill bg-green-ghost px-1.5 py-0.5 text-[10.5px] font-medium text-green-deep">
+                  Reimbursed {formatMoney(totalReimbursed)}
+                </span>
               </div>
             </div>
           </Card>

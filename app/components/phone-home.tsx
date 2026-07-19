@@ -10,12 +10,16 @@ import {
   envelopeSpent,
   goalOnTrack,
   leftToSpend,
+  owedToYou,
   paceFraction,
+  reimbursedThisMonth,
   totalSpent,
 } from "../lib/selectors";
 import AddTransactionSheet from "./add-transaction-sheet";
 import ProgressBar from "./progress-bar";
+import TransactionDetailSheet from "./transaction-detail-sheet";
 import TransactionRow from "./transaction-row";
+import VenmoPaymentSheet from "./venmo-payment-sheet";
 
 function EmptyCard({
   title,
@@ -42,6 +46,9 @@ export default function PhoneHome() {
   const { transactions, categories, envelopes, monthBudgets, goals } =
     useAppData();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [venmoSheetOpen, setVenmoSheetOpen] = useState(false);
+  const [selectedTxnId, setSelectedTxnId] = useState<string | null>(null);
+  const selectedTxn = transactions.find((t) => t.id === selectedTxnId) ?? null;
 
   const today = todayIso();
   const month = today.slice(0, 7);
@@ -54,6 +61,10 @@ export default function PhoneHome() {
   const over = left < 0;
   const spentPercent = hasBudget ? (spent / budget) * 100 : 0;
   const pacePercent = paceFraction(month) * 100;
+
+  const owed = owedToYou(transactions);
+  const hasAnyReimbursable = transactions.some((t) => t.reimbursable);
+  const reimbursedMonth = reimbursedThisMonth(transactions, month);
 
   const budgetedEnvelopes = categories
     .map((c) => ({
@@ -71,6 +82,10 @@ export default function PhoneHome() {
       return a.deadline.localeCompare(b.deadline);
     })
     .slice(0, 3);
+
+  const unpaidReimbursable = transactions
+    .filter((t) => t.reimbursable && !t.reimbPaid)
+    .sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <div className="flex min-h-dvh flex-col bg-surface">
@@ -118,6 +133,19 @@ export default function PhoneHome() {
               pacePercent={hasBudget ? pacePercent : undefined}
             />
           </div>
+          {owed > 0 ? (
+            <p className="mt-3 flex items-center gap-1.5 text-[12px] font-medium text-clay">
+              <span className="h-1.5 w-1.5 rounded-full bg-clay" />
+              {formatMoney(owed)} owed to you
+            </p>
+          ) : (
+            hasAnyReimbursable && (
+              <p className="mt-3 flex items-center gap-1.5 text-[12px] font-medium text-green-deep">
+                <span className="h-1.5 w-1.5 rounded-full bg-green" />
+                All reimbursed
+              </p>
+            )
+          )}
         </section>
 
         {/* Envelopes */}
@@ -165,10 +193,55 @@ export default function PhoneHome() {
         </section>
 
         {/* Owed to me */}
-        <EmptyCard
-          title="Owed to me"
-          hint="Reimbursable charges you're waiting to get paid back for will appear here."
-        />
+        <section>
+          <div className="mb-2 flex items-center justify-between px-1">
+            <h2 className="font-display-phone text-[15px] font-medium text-text-primary">
+              Owed to me
+            </h2>
+          </div>
+          {unpaidReimbursable.length === 0 && reimbursedMonth === 0 ? (
+            <EmptyCard
+              title="Nothing owed"
+              hint="Reimbursable charges you're waiting to get paid back for will appear here."
+            />
+          ) : (
+            <section className="rounded-card border border-card-border bg-card p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-display-phone text-[26px] font-semibold text-text-primary">
+                    {formatMoney(owed)}
+                  </p>
+                  <p className="text-[11.5px] text-text-muted">
+                    {unpaidReimbursable.length} charge
+                    {unpaidReimbursable.length === 1 ? "" : "s"} to collect
+                    {reimbursedMonth > 0 &&
+                      ` · ${formatMoney(reimbursedMonth)} reimbursed this month`}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setVenmoSheetOpen(true)}
+                  className="shrink-0 rounded-button bg-green px-3 py-2 text-[12px] font-medium text-card"
+                >
+                  Log a Venmo payment
+                </button>
+              </div>
+
+              {unpaidReimbursable.length > 0 && (
+                <div className="mt-3 divide-y divide-card-border border-t border-card-border">
+                  {unpaidReimbursable.map((t) => (
+                    <TransactionRow
+                      key={t.id}
+                      transaction={t}
+                      category={categories.find((c) => c.id === t.categoryId)}
+                      onClick={() => setSelectedTxnId(t.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+        </section>
 
         {/* Today */}
         <section>
@@ -189,6 +262,7 @@ export default function PhoneHome() {
                   key={t.id}
                   transaction={t}
                   category={categories.find((c) => c.id === t.categoryId)}
+                  onClick={() => setSelectedTxnId(t.id)}
                 />
               ))}
             </section>
@@ -286,6 +360,15 @@ export default function PhoneHome() {
       </nav>
 
       {sheetOpen && <AddTransactionSheet onClose={() => setSheetOpen(false)} />}
+      {venmoSheetOpen && (
+        <VenmoPaymentSheet onClose={() => setVenmoSheetOpen(false)} />
+      )}
+      {selectedTxn && (
+        <TransactionDetailSheet
+          transaction={selectedTxn}
+          onClose={() => setSelectedTxnId(null)}
+        />
+      )}
     </div>
   );
 }

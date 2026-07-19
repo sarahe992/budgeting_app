@@ -74,6 +74,66 @@ export function totalSaved(transactions: Transaction[], month: string): number {
     .reduce((sum, t) => sum + t.amount, 0);
 }
 
+/** Sum of reimbursable charges' owed-back amount, dated within `month`. */
+export function reimbursableTotal(
+  transactions: Transaction[],
+  month: string
+): number {
+  return transactions
+    .filter((t) => t.reimbursable && t.date.startsWith(month))
+    .reduce((sum, t) => sum + t.reimbAmt, 0);
+}
+
+/** What you actually paid for yourself this month, net of reimbursable charges. */
+export function outOfPocket(transactions: Transaction[], month: string): number {
+  return totalSpent(transactions, month) - reimbursableTotal(transactions, month);
+}
+
+/**
+ * Running "owed to you" balance — unlike the month-scoped stats above, this
+ * is deliberately all-time: a debt from last month doesn't stop being owed
+ * just because the calendar rolled over.
+ */
+export function owedToYou(transactions: Transaction[]): number {
+  return transactions
+    .filter((t) => t.reimbursable && !t.reimbPaid)
+    .reduce((sum, t) => sum + t.reimbAmt, 0);
+}
+
+/** All-time total of reimbursable charges that have been paid back. */
+export function alreadyReimbursed(transactions: Transaction[]): number {
+  return transactions
+    .filter((t) => t.reimbursable && t.reimbPaid)
+    .reduce((sum, t) => sum + t.reimbAmt, 0);
+}
+
+/** Reimbursed charges dated within `month` — the phone Owed-to-me card's "this month" figure. */
+export function reimbursedThisMonth(
+  transactions: Transaction[],
+  month: string
+): number {
+  return transactions
+    .filter((t) => t.reimbursable && t.reimbPaid && t.date.startsWith(month))
+    .reduce((sum, t) => sum + t.reimbAmt, 0);
+}
+
+/** Envelope spend net of whatever portion of it is reimbursable. */
+export function envelopeSpentNet(
+  transactions: Transaction[],
+  categoryId: string,
+  month: string
+): number {
+  const catTxns = transactions.filter(
+    (t) =>
+      t.type === "spending" && t.categoryId === categoryId && t.date.startsWith(month)
+  );
+  const spent = catTxns.reduce((sum, t) => sum + t.amount, 0);
+  const reimb = catTxns
+    .filter((t) => t.reimbursable)
+    .reduce((sum, t) => sum + t.reimbAmt, 0);
+  return spent - reimb;
+}
+
 export function envelopeBudget(
   envelopes: Envelope[],
   categoryId: string,

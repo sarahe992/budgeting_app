@@ -43,6 +43,8 @@ interface AppData {
   rules: CategoryRule[];
   addTransaction: (tx: Omit<Transaction, "id">) => void;
   importTransactions: (txs: Omit<Transaction, "id">[]) => void;
+  updateTransaction: (id: string, patch: Partial<Transaction>) => void;
+  markTransactionsPaid: (ids: string[]) => void;
   setCategories: (categories: Category[]) => void;
   setEnvelopeBudget: (categoryId: string, month: string, budget: number) => void;
   setMonthBudget: (month: string, budget: number) => void;
@@ -122,6 +124,25 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     }));
   }
 
+  function updateTransaction(id: string, patch: Partial<Transaction>) {
+    setState((prev) => ({
+      ...prev,
+      transactions: prev.transactions.map((t) =>
+        t.id === id ? { ...t, ...patch } : t
+      ),
+    }));
+  }
+
+  function markTransactionsPaid(ids: string[]) {
+    const idSet = new Set(ids);
+    setState((prev) => ({
+      ...prev,
+      transactions: prev.transactions.map((t) =>
+        idSet.has(t.id) ? { ...t, reimbPaid: true } : t
+      ),
+    }));
+  }
+
   function setCategories(categories: Category[]) {
     setState((prev) => ({ ...prev, categories }));
   }
@@ -198,6 +219,8 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
         rules: state.rules,
         addTransaction,
         importTransactions,
+        updateTransaction,
+        markTransactionsPaid,
         setCategories,
         setEnvelopeBudget,
         setMonthBudget,

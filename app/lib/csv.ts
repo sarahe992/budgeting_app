@@ -8,6 +8,7 @@ export interface ParsedRow {
   direction: "in" | "out";
   categoryId: string | null;
   accountId: AccountId;
+  reimbursable: boolean;
 }
 
 /** RFC4180-ish line splitter: respects quoted fields (commas, doubled-quote escapes). */
@@ -67,6 +68,23 @@ export function matchCategory(
   return null;
 }
 
+// Per PRD 7.1: rideshare and lodging are always worth a second look; a
+// restaurant/fast-food charge only crosses the "probably split with someone"
+// threshold once it's more than a solo meal.
+const RIDESHARE_LODGING_PATTERN = /\b(UBER|UBR|LYFT|AIRBNB|HOTEL|LODG\w*)\b/i;
+const RESTAURANT_FLAG_THRESHOLD = 15;
+
+export function autoFlagReimbursable(
+  description: string,
+  amount: number,
+  categoryId: string | null
+): boolean {
+  if (categoryId === "out-to-eat" && amount > RESTAURANT_FLAG_THRESHOLD) {
+    return true;
+  }
+  return RIDESHARE_LODGING_PATTERN.test(description);
+}
+
 function cleanDescription(raw: string): string {
   return raw.replace(/\s+/g, " ").trim();
 }
@@ -121,8 +139,19 @@ export function parseBankCsv(
     const type = classifyType(name, isCredit);
     const direction: "in" | "out" = isCredit ? "in" : "out";
     const categoryId = type === "spending" ? matchCategory(name, rules) : null;
+    const reimbursable =
+      type === "spending" && autoFlagReimbursable(name, amount, categoryId);
 
-    rows.push({ date, name, amount, type, direction, categoryId, accountId });
+    rows.push({
+      date,
+      name,
+      amount,
+      type,
+      direction,
+      categoryId,
+      accountId,
+      reimbursable,
+    });
   }
   return rows;
 }
